@@ -28,7 +28,11 @@ public class ResultsHandler extends EmptyEventHandler implements PageEventHandle
 		this.caller = caller;
 	}
 	
-	public boolean foundNode(HtmlElement node, String selector) {
+	public String getSelector(){
+		return SELECTOR_RESULTS;
+	}
+	
+	public boolean foundNode(HtmlElement node) {
 		try{
 			Validator laptop = new Laptop(node);
 			if(laptop.valid()){

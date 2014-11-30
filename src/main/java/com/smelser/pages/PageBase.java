@@ -23,7 +23,7 @@ public abstract class PageBase extends EmptyEventHandler implements Page {
 	static final Logger LOG = LoggerFactory.getLogger(PageBase.class);
 	
 	private final HtmlPage page;
-	private final List<NodeEvtMap> selectors = new ArrayList<NodeEvtMap>();
+	private final List<PageEventHandler> selectors = new ArrayList<PageEventHandler>();
 	private PageEventHandler defaultHandler = null;
 	
 	public PageBase(final HtmlPage page){
@@ -36,12 +36,12 @@ public abstract class PageBase extends EmptyEventHandler implements Page {
 	
 	public void addSelector(String css3selector){
 		if(defaultHandler == null) throw new IllegalStateException("No default handler was set.  Call setDefaultHandler() first.");
-		selectors.add(new NodeEvtMap(css3selector,defaultHandler));
+		selectors.add(defaultHandler);
 	}
 	
-	public void addSelector(String css3selector, PageEventHandler handler){
-		LOG.info("Added css3 selector: "+css3selector);
-		selectors.add(new NodeEvtMap(css3selector,handler));
+	public void addSelector(PageEventHandler handler){
+		LOG.info("Added css3 selector: "+handler.getSelector());
+		selectors.add(handler);
 	}
 	
 	public void doPage() throws FailingHttpStatusCodeException, MalformedURLException, IOException{
@@ -49,15 +49,15 @@ public abstract class PageBase extends EmptyEventHandler implements Page {
 		HtmlElement doc = page.getDocumentElement();
 		
 		
-		for(NodeEvtMap map : selectors){
-			map.handler.beforeSelector();
-			LOG.info("Executing selector: "+map.selector);
-			for(DomNode node : doc.querySelectorAll(map.selector)){
-				map.handler.beforeNode();
-				if(!map.handler.foundNode((HtmlElement)node,map.selector)) break;
-				map.handler.afterNode();
+		for(PageEventHandler handler : selectors){
+			handler.beforeSelector();
+			LOG.info("Executing selector: "+handler.getSelector());
+			for(DomNode node : doc.querySelectorAll(handler.getSelector())){
+				handler.beforeNode();
+				if(!handler.foundNode((HtmlElement)node)) break;
+				handler.afterNode();
 			}
-			map.handler.afterSelector();
+			handler.afterSelector();
 		}
 	}
 	

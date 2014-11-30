@@ -13,9 +13,6 @@ public class OutletLaptopPage extends PageBase implements PageEventHandler, Page
 	
 	static final Logger LOG = LoggerFactory.getLogger(OutletLaptopPage.class);
 	
-	private final String SELECTOR_SORT = "#facet_result_sort";
-	private final String SELECTOR_RESULTS = ".facetedResults li";
-	
 	
 	private HtmlPage page;
 	
@@ -26,8 +23,8 @@ public class OutletLaptopPage extends PageBase implements PageEventHandler, Page
 		this.page = page;
 		this.setDefaultHandler(this);
 
-		//this.addSelector(SELECTOR_SORT, new SortHandler(page, this));
-		this.addSelector(SELECTOR_RESULTS, new ResultsHandler(page, this));
+		//this.addSelector(new SortHandler(page, this));
+		this.addSelector(new ResultsHandler(page, this));
 	}	
 
 	public boolean foundNode(HtmlElement node, String selector) {
@@ -50,6 +47,14 @@ public class OutletLaptopPage extends PageBase implements PageEventHandler, Page
 
 	public void waitOnComplete() {
 		// TODO Auto-generated method stub		
+	}
+
+	public String getSelector() {
+		return null;
+	}
+
+	public boolean foundNode(HtmlElement node) {
+		return true;
 	}
 
 }

@@ -15,6 +15,8 @@ public class SortHandler extends EmptyEventHandler implements PageEventHandler{
 	
 	private static final Logger LOG = LoggerFactory.getLogger(SortHandler.class);
 	
+	private final String SELECTOR = "#facet_result_sort";
+	
 	private HtmlPage page;
 	private Page caller;
 	
@@ -23,7 +25,7 @@ public class SortHandler extends EmptyEventHandler implements PageEventHandler{
 		this.caller = caller;
 	}
 	
-	public boolean foundNode(HtmlElement node, String selector) {
+	public boolean foundNode(HtmlElement node) {
 		
 		HtmlSelect select = (HtmlSelect) node;
 		HtmlOption option = select.getOptionByText("PRICE(Low)");
@@ -54,5 +56,9 @@ public class SortHandler extends EmptyEventHandler implements PageEventHandler{
 
 	public HtmlPage getPage() {
 		return this.page;
+	}
+
+	public String getSelector() {
+		return SELECTOR;
 	}
 }

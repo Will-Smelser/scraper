@@ -40,7 +40,7 @@ public abstract class PageBase extends EmptyEventHandler implements Page {
 	}
 	
 	public void addSelector(String css3selector, PageEventHandler handler){
-		LOG.info("Added css3 selectore: "+css3selector);
+		LOG.info("Added css3 selector: "+css3selector);
 		selectors.add(new NodeEvtMap(css3selector,handler));
 	}
 	

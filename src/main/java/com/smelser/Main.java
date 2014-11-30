@@ -31,8 +31,6 @@ public class Main {
 		    final CookieManager cm = myClient.getCookieManager();
 		    HtmlPage page = webClient.getPage("http://outlet.lenovo.com/outlet_us/laptops/#facet-1=1,2,3,4&facet-3=16,22");
 		    
-		    System.out.println("HELLO2");
-		    
 		    final Page laptops = new OutletLaptopPage(page); 
 		    laptops.doPage();
 		    laptops.waitOnComplete();

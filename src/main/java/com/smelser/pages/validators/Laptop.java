@@ -4,12 +4,19 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
+import org.eclipse.jetty.util.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.smelser.Main;
 
 
 public class Laptop implements Validator{
+	
+	static final Logger LOG = LoggerFactory.getLogger(Laptop.class);
 	
 	boolean stock = false;
 	String title, p, m, hd, price;

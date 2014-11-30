@@ -19,7 +19,7 @@ public class ResultsHandler extends EmptyEventHandler implements PageEventHandle
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ResultsHandler.class);
 	
-	private static final String SELECTOR_RESULTS = ".facetedResults li";
+	private static final String SELECTOR_RESULTS = ".facetedResults > li";
 	private HtmlPage page;
 	private Page caller;
 	
@@ -48,6 +48,7 @@ public class ResultsHandler extends EmptyEventHandler implements PageEventHandle
 				LOG.info("Skipped: "+laptop.toString());
 		}catch(Exception e){
 			LOG.error("Exception validating laptop",e);
+			LOG.error(node.asXml());
 		}
 		return true;
 	}

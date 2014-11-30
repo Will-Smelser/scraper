@@ -28,7 +28,7 @@ public class CookieToJSON {
 	    	cookiesOut.append("\"path\": \""+cookie.getPath()+"\",\n");
 	    	cookiesOut.append("\"secure\": "+cookie.isSecure()+",\n");
 	    	cookiesOut.append("\"session\": false,\n");
-	    	cookiesOut.append("\"storeId\": 0,\n");
+	    	cookiesOut.append("\"storeId\": \"0\",\n");
 	    	cookiesOut.append("\"value\": \""+cookie.getValue().replace("\"", "\\\"")+"\",\n");
 	    	cookiesOut.append("\"id\": "+i+"}\n");
 	    	i++;

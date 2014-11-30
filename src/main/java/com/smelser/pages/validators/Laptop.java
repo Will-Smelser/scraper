@@ -53,13 +53,12 @@ public class Laptop implements Validator{
 	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
-		sb.append("Latop:");
-		sb.append("\tstock:"+stock);
-		sb.append("\t"+title);
-		sb.append("\t"+p);
-		sb.append("\t"+m);
-		sb.append("\t"+hd);
-		sb.append("\t"+price);
+		sb.append("\nLatop: "+title);
+		sb.append("\n\tstock:     "+stock);
+		sb.append("\n\tprocessor: "+p);
+		sb.append("\n\tmemory:    "+m);
+		sb.append("\n\tdrive:     "+hd);
+		sb.append("\n\tprice:     "+price);
 		
 		return sb.toString();
 	}
@@ -88,7 +87,7 @@ public class Laptop implements Validator{
 		if(stock && value.longValue() < 500.0 && checkProcessor() && checkMemory() && checkHd()){
 			return true;
 		}
-		return false;
+		return true;
 	}
 
 	public void addCart() {

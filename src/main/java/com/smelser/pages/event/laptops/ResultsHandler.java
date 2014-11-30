@@ -1,6 +1,8 @@
 package com.smelser.pages.event.laptops;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,18 +16,19 @@ import com.smelser.pages.event.EmptyEventHandler;
 import com.smelser.pages.event.PageEventHandler;
 import com.smelser.pages.validators.Laptop;
 import com.smelser.pages.validators.Validator;
+import com.smelser.utils.PageManager;
 
 public class ResultsHandler extends EmptyEventHandler implements PageEventHandler {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ResultsHandler.class);
 	
 	private static final String SELECTOR_RESULTS = ".facetedResults > li";
-	private HtmlPage page;
-	private Page caller;
+	private PageManager pm;
 	
-	public ResultsHandler(HtmlPage page, Page caller){
-		this.page = page;
-		this.caller = caller;
+	private List<Validator> laptops = new ArrayList<Validator>();
+	
+	public ResultsHandler(PageManager page){
+		this.pm = page;
 	}
 	
 	public String getSelector(){
@@ -36,20 +39,31 @@ public class ResultsHandler extends EmptyEventHandler implements PageEventHandle
 		try{
 			Validator laptop = new Laptop(node);
 			if(laptop.valid()){
+				laptops.add(laptop);
 				LOG.info("Found valid laptop");
 				LOG.info(laptop.toString());
 				try {
-					page = ((HtmlAnchor)node.querySelector(".facetedResults-footer a")).click();
-					caller.setPage(page);
-					//wait for page to load
-					page.asXml();
+					HtmlPage p = ((HtmlAnchor)node.querySelector(".facetedResults-footer a")).click();
 					
+					//failed to add to cart
+					if(!p.getUrl().toString().toLowerCase().contains("cart")){
+						LOG.info("Failed to add to cart, skipping.  Result page: "+p.getUrl());
+						return true;
+					}
+					
+					pm.setPage(p);
+					pm.addValidator(laptop);
+					
+					//wait for page to load
+					p.getPage().asXml();
+					
+					//we will let the process ass multiple items to cart if set to true
 					return false;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}else
-				LOG.info("Skipped: "+laptop.toString());
+				LOG.info("Skipped: "+laptop.toString().replace("\n", ""));
 		}catch(Exception e){
 			LOG.error("Exception validating laptop",e);
 			LOG.error(node.asXml());
@@ -58,7 +72,7 @@ public class ResultsHandler extends EmptyEventHandler implements PageEventHandle
 	}
 
 	public void beforeSelector() {
-		waitTillContentLoaded(this.page);
+		waitTillContentLoaded(this.pm.getPage());
 	}
 	
 	public static void waitTillContentLoaded(HtmlPage page){
@@ -95,7 +109,4 @@ public class ResultsHandler extends EmptyEventHandler implements PageEventHandle
 		}
 	}
 
-	public HtmlPage getPage() {
-		return this.page;
-	}
 }

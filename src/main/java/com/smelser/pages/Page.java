@@ -10,8 +10,5 @@ public interface Page {
 	public void waitOnComplete();
 
 	public void doPage() throws FailingHttpStatusCodeException, MalformedURLException, IOException;
-	
-	public HtmlPage getPage();
-	
-	public void setPage(HtmlPage page);
+
 }

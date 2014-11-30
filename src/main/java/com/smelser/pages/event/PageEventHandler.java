@@ -9,6 +9,5 @@ public interface PageEventHandler {
 	public void beforeNode();
 	public void afterSelector();
 	public void beforeSelector();
-	public HtmlPage getPage();
 	public String getSelector();
 }

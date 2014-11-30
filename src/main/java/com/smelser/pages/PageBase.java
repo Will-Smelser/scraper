@@ -5,29 +5,26 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jetty.util.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.smelser.Main;
 import com.smelser.pages.event.EmptyEventHandler;
-import com.smelser.pages.event.NodeEvtMap;
 import com.smelser.pages.event.PageEventHandler;
+import com.smelser.utils.PageManager;
 
 public abstract class PageBase extends EmptyEventHandler implements Page {
 	
 	static final Logger LOG = LoggerFactory.getLogger(PageBase.class);
 	
-	private final HtmlPage page;
+	private final PageManager pm;
 	private final List<PageEventHandler> selectors = new ArrayList<PageEventHandler>();
 	private PageEventHandler defaultHandler = null;
 	
-	public PageBase(final HtmlPage page){
-		this.page = page;
+	public PageBase(final PageManager pm){
+		this.pm = pm;
 	}
 	
 	public void setDefaultHandler(PageEventHandler handler){
@@ -46,7 +43,7 @@ public abstract class PageBase extends EmptyEventHandler implements Page {
 	
 	public void doPage() throws FailingHttpStatusCodeException, MalformedURLException, IOException{
 		
-		HtmlElement doc = page.getDocumentElement();
+		HtmlElement doc = pm.getPage().getDocumentElement();
 		
 		
 		for(PageEventHandler handler : selectors){

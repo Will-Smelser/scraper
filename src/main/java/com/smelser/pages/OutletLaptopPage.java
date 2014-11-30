@@ -8,41 +8,29 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.smelser.pages.event.PageEventHandler;
 import com.smelser.pages.event.laptops.ResultsHandler;
 import com.smelser.pages.event.laptops.SortHandler;
+import com.smelser.utils.PageManager;
 
 public class OutletLaptopPage extends PageBase implements PageEventHandler, Page {
 	
 	static final Logger LOG = LoggerFactory.getLogger(OutletLaptopPage.class);
 	
 	
-	private HtmlPage page;
+	private PageManager pm;
 	
 
-	public OutletLaptopPage(HtmlPage page) {		
-		super(page);
+	public OutletLaptopPage(PageManager pm) {		
+		super(pm);
 		
-		this.page = page;
+		this.pm = pm;
 		this.setDefaultHandler(this);
 
 		//this.addSelector(new SortHandler(page, this));
-		this.addSelector(new ResultsHandler(page, this));
+		this.addSelector(new ResultsHandler(pm));
 	}	
-
-	public boolean foundNode(HtmlElement node, String selector) {
-		throw new IllegalStateException("Not implemented");
-	}
-	
-	
-	public void setPage(HtmlPage page){
-		this.page = page;
-	}
-	
-	public HtmlPage getPage(){
-		return page;
-	}
 
 
 	public void beforeSelector() {
-		ResultsHandler.waitTillContentLoaded(page);
+		ResultsHandler.waitTillContentLoaded(pm.getPage());
 	}
 
 	public void waitOnComplete() {

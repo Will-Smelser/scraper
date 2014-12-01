@@ -9,6 +9,10 @@ import com.smelser.pages.validators.Validator;
 
 public class PageManager {
 	private HtmlPage page; 
+	
+	/**
+	 * Items which have been validated
+	 */
 	private List<Validator> validators = new ArrayList<Validator>();
 		
 	final public void setPage(HtmlPage page){

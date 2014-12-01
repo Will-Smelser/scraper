@@ -32,7 +32,7 @@ public class Main {
 
 	    while(!Thread.currentThread().interrupted()){
 
-	    	HtmlPage page = webClient.getPage("http://outlet.lenovo.com/outlet_us/laptops/#facet-1=1,2,3,4&facet-3=14,16,22");
+	    	HtmlPage page = webClient.getPage("http://outlet.lenovo.com/outlet_us/laptops/#facet-1=1,2,3,4&facet-3=16,22");
 		     
 		    pm.clearValidators();
 		    pm.setPage(page);

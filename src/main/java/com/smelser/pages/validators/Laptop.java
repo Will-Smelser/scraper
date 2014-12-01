@@ -87,7 +87,7 @@ public class Laptop implements Validator{
 		if(stock && value.longValue() < 500.0 && checkProcessor() && checkMemory() && checkHd()){
 			return true;
 		}
-		return true;
+		return false;
 	}
 
 	public void addCart() {

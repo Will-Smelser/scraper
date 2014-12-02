@@ -34,6 +34,10 @@ public class PageManager {
 		return result;
 	}
 	
+	final public boolean hasValidators(){
+		return (validators.size() > 0);
+	}
+	
 	final public void clearValidators(){
 		validators.clear();
 	}

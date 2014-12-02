@@ -15,41 +15,29 @@ import com.smelser.pages.event.EmptyEventHandler;
 import com.smelser.pages.event.PageEventHandler;
 import com.smelser.utils.PageManager;
 
-public abstract class PageBase extends EmptyEventHandler implements Page {
+public abstract class PageBase implements MyPage {
 	
 	static final Logger LOG = LoggerFactory.getLogger(PageBase.class);
 	
 	private final PageManager pm;
 	private final List<PageEventHandler> selectors = new ArrayList<PageEventHandler>();
-	private PageEventHandler defaultHandler = null;
 	
 	public PageBase(final PageManager pm){
 		this.pm = pm;
 	}
-	
-	public void setDefaultHandler(PageEventHandler handler){
-		this.defaultHandler = handler;
-	}
-	
-	public void addSelector(String css3selector){
-		if(defaultHandler == null) throw new IllegalStateException("No default handler was set.  Call setDefaultHandler() first.");
-		selectors.add(defaultHandler);
-	}
+
 	
 	public void addSelector(PageEventHandler handler){
 		LOG.info("Added css3 selector: "+handler.getSelector());
 		selectors.add(handler);
 	}
 	
-	public void doPage() throws FailingHttpStatusCodeException, MalformedURLException, IOException{
-		
-		HtmlElement doc = pm.getPage().getDocumentElement();
-		
+	public void doPage(HtmlElement el) throws FailingHttpStatusCodeException, MalformedURLException, IOException{
 		
 		for(PageEventHandler handler : selectors){
 			handler.beforeSelector();
 			LOG.info("Executing selector: "+handler.getSelector());
-			for(DomNode node : doc.querySelectorAll(handler.getSelector())){
+			for(DomNode node : el.querySelectorAll(handler.getSelector())){
 				handler.beforeNode();
 				if(!handler.foundNode((HtmlElement)node)) break;
 				handler.afterNode();
@@ -57,12 +45,5 @@ public abstract class PageBase extends EmptyEventHandler implements Page {
 			handler.afterSelector();
 		}
 	}
-	
-	public void waitForReady(){
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		}
-	}
+
 }

@@ -11,7 +11,7 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.smelser.pages.OutletLaptopPage;
-import com.smelser.pages.Page;
+import com.smelser.pages.MyPage;
 import com.smelser.utils.CookieToJSON;
 import com.smelser.utils.Gmail;
 import com.smelser.utils.PageManager;
@@ -31,35 +31,35 @@ public class Main {
 	    final PageManager pm = new PageManager();
 
 	    while(!Thread.currentThread().interrupted()){
-
-	    	HtmlPage page = webClient.getPage("http://outlet.lenovo.com/outlet_us/laptops/#facet-1=1,2,3,4&facet-3=16,22");
-		     
-		    pm.clearValidators();
-		    pm.setPage(page);
-		    final Page laptops = new OutletLaptopPage(pm);
-		    
-		    laptops.doPage();
-		    laptops.waitOnComplete();
-		    
-		    LOG.info(pm.getPage().getUrl().toString());
-		    
-		    String cookies = CookieToJSON.toJSON(cm.getCookies());
-		    
-		    LOG.info("On Page: "+page.getUrl());
-		    
-		    if(pm.getPage().getUrl().toString().toLowerCase().contains("cart")){
-		    	LOG.info("Found an item and added to cart");
-		    	if(SEND_EMAIL){
-		    		Gmail.sendAttached(pm.getValidatorsAsString("================"),cookies);
-		    	}
-		    	
-		    	LOG.info(pm.getValidatorsAsString("================"));
-		    	LOG.trace(cookies);
-		    }else{
-		    	LOG.info("No items added to cart");
-		    }
-		    
-		    webClient.closeAllWindows();
+	    	
+	    	try{
+	    	
+			    pm.clearValidators();
+			    final MyPage laptops = new OutletLaptopPage(pm, webClient);
+			    
+			    laptops.doPage(null);
+			    
+			    LOG.info("On Page: "+pm.getPage().getUrl().toString());
+			    
+			    String cookies = CookieToJSON.toJSON(cm.getCookies());
+			    
+			    //if we have validators, then items should be in the cart
+			    if(pm.hasValidators()){
+			    	LOG.info("Found an item and added to cart");
+			    	if(SEND_EMAIL){
+			    		Gmail.sendAttached(pm.getValidatorsAsString("================"),cookies);
+			    	}
+			    	
+			    	LOG.info(pm.getValidatorsAsString("================"));
+			    	LOG.trace(cookies);
+			    }else{
+			    	LOG.info("No items added to cart");
+			    }
+			    
+			    webClient.closeAllWindows();
+	    	}catch(Exception e){
+	    		LOG.warn("Failed to load page");
+	    	}
 		    
 		    Thread.sleep(30000);
 	    }

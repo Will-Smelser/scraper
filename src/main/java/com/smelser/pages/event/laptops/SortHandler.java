@@ -7,7 +7,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.smelser.pages.Page;
+import com.smelser.pages.MyPage;
 import com.smelser.pages.event.EmptyEventHandler;
 import com.smelser.pages.event.PageEventHandler;
 
@@ -18,9 +18,9 @@ public class SortHandler extends EmptyEventHandler implements PageEventHandler{
 	private final String SELECTOR = "#facet_result_sort";
 	
 	private HtmlPage page;
-	private Page caller;
+	private MyPage caller;
 	
-	public SortHandler(HtmlPage page, Page caller){
+	public SortHandler(HtmlPage page, MyPage caller){
 		this.page = page;
 		this.caller = caller;
 	}

@@ -11,7 +11,6 @@ import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.smelser.pages.Page;
 import com.smelser.pages.event.EmptyEventHandler;
 import com.smelser.pages.event.PageEventHandler;
 import com.smelser.pages.validators.Laptop;
@@ -51,14 +50,15 @@ public class ResultsHandler extends EmptyEventHandler implements PageEventHandle
 						return true;
 					}
 					
-					pm.setPage(p);
 					pm.addValidator(laptop);
 					
 					//wait for page to load
 					p.getPage().asXml();
 					
-					//we will let the process ass multiple items to cart if set to true
-					return false;
+					LOG.info("Added item to cart.  Waiting, then continue to examine result set for more items.");
+					Thread.sleep(5000);
+					
+					return true;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

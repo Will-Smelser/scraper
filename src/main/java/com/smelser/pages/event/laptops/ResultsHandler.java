@@ -1,6 +1,5 @@
 package com.smelser.pages.event.laptops;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +25,11 @@ public class ResultsHandler extends EmptyEventHandler implements PageEventHandle
 	
 	private List<Validator> laptops = new ArrayList<Validator>();
 	
-	public ResultsHandler(PageManager page){
-		this.pm = page;
+	private final PageEventHandler cartHandler;
+	
+	public ResultsHandler(PageManager pm){
+		this.pm = pm;
+		this.cartHandler = new CartHandler();
 	}
 	
 	public String getSelector(){
@@ -38,30 +40,24 @@ public class ResultsHandler extends EmptyEventHandler implements PageEventHandle
 		try{
 			Validator laptop = new Laptop(node);
 			if(laptop.valid()){
+				
 				laptops.add(laptop);
 				LOG.info("Found valid laptop");
 				LOG.info(laptop.toString());
-				try {
-					HtmlPage p = ((HtmlAnchor)node.querySelector(".facetedResults-footer a")).click();
-					
-					//failed to add to cart
-					if(!p.getUrl().toString().toLowerCase().contains("cart")){
-						LOG.info("Failed to add to cart, skipping.  Result page: "+p.getUrl());
-						return true;
-					}
-					
-					pm.addValidator(laptop);
-					
-					//wait for page to load
-					p.getPage().asXml();
-					
-					LOG.info("Added item to cart.  Waiting, then continue to examine result set for more items.");
-					Thread.sleep(5000);
-					
-					return true;
-				} catch (IOException e) {
-					e.printStackTrace();
+				
+				
+				cartHandler.beforeSelector();
+				HtmlAnchor anchor = (HtmlAnchor)node.querySelector(cartHandler.getSelector());
+				
+				if(anchor != null){
+					cartHandler.beforeNode();
+					if(!cartHandler.foundNode(anchor))
+						return false;
+					cartHandler.afterNode();
 				}
+				
+				cartHandler.afterSelector();
+				
 			}else
 				LOG.info("Skipped: "+laptop.toString().replace("\n", ""));
 		}catch(Exception e){

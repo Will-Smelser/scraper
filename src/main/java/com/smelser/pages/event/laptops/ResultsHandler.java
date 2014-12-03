@@ -41,20 +41,21 @@ public class ResultsHandler extends EmptyEventHandler implements PageEventHandle
 			Validator laptop = new Laptop(node);
 			if(laptop.valid()){
 				
-				laptops.add(laptop);
 				LOG.info("Found valid laptop");
 				LOG.info(laptop.toString());
-				
 				
 				cartHandler.beforeSelector();
 				HtmlAnchor anchor = (HtmlAnchor)node.querySelector(cartHandler.getSelector());
 				
 				if(anchor != null){
+					pm.addValidator(laptop);
+					
 					cartHandler.beforeNode();
 					if(!cartHandler.foundNode(anchor))
 						return false;
 					cartHandler.afterNode();
-				}
+				}else
+					LOG.warn("Failed to find element.");
 				
 				cartHandler.afterSelector();
 				

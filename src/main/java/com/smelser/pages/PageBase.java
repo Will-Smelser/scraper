@@ -19,7 +19,7 @@ public abstract class PageBase implements MyPage {
 	
 	static final Logger LOG = LoggerFactory.getLogger(PageBase.class);
 	
-	private final PageManager pm;
+	protected final PageManager pm;
 	private final List<PageEventHandler> selectors = new ArrayList<PageEventHandler>();
 	
 	public PageBase(final PageManager pm){
@@ -32,7 +32,7 @@ public abstract class PageBase implements MyPage {
 		selectors.add(handler);
 	}
 	
-	public void doPage(HtmlElement el) throws FailingHttpStatusCodeException, MalformedURLException, IOException{
+	public void doPage(HtmlElement el) {
 		
 		for(PageEventHandler handler : selectors){
 			handler.beforeSelector();

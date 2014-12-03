@@ -1,21 +1,13 @@
 package com.smelser.pages.event.laptops;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.smelser.pages.event.EmptyEventHandler;
 import com.smelser.pages.event.PageEventHandler;
-import com.smelser.pages.validators.Laptop;
-import com.smelser.pages.validators.Validator;
-import com.smelser.utils.PageManager;
 
 public class CartHandler extends EmptyEventHandler implements PageEventHandler {
 	

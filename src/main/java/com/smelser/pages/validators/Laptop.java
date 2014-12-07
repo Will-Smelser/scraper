@@ -51,9 +51,13 @@ public class Laptop implements Validator {
 
 	private static enum Values {
 
-		I3(175.0), I5(250.0), I7(350), NEW(125.0), USED(0.0), GB16(350.0), GB8(
-				150.0), GB6(85.0), GB4(0.0), SSD(125.0), HD7200(50.0), HD5400(
-				0.0),
+		I3(175.0), I5(250.0), I7(350), 
+		
+		NEW(125.0), USED(0.0), YOGA2PRO(75.0),
+		
+		GB16(350.0), GB8(150.0), GB6(85.0), GB4(0.0), 
+		
+		SSD(125.0), HD7200(50.0), HD5400(0.0),
 
 		UNKNOWN(0.0);
 
@@ -166,9 +170,14 @@ public class Laptop implements Validator {
 	}
 
 	private Number checkTitle() {
+		long value = 0;
 		if (title.contains("new"))
-			return Values.NEW.value;
-		return Values.USED.value;
+			value = value + Values.NEW.value.longValue();
+		
+		if(title.contains("yoga 2 pro"))
+			value = value + Values.YOGA2PRO.value.longValue();
+		
+		return value;
 
 	}
 

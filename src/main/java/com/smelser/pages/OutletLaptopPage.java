@@ -32,18 +32,29 @@ public class OutletLaptopPage extends PageBase implements MyPage, Runnable {
     private final WebClient webClient = myClient.getWebClient();
     private final CookieManager cm = myClient.getCookieManager();
 
-	public OutletLaptopPage() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+	public OutletLaptopPage() {
 		super(new PageManager());
-	    this.page = (HtmlPage) webClient.getPage(START_URL);
-		this.pm.setPage(page);
 
 		//this.addSelector(new SortHandler(page, this));
 		this.addSelector(new ResultsHandler(pm));
 	}	
 	
 	public void doPage(HtmlElement el) {
-		super.doPage(page.getDocumentElement());
+		try {
+			webClient.closeAllWindows();
+			
+			this.page = (HtmlPage) webClient.getPage(START_URL);
+		} catch (Exception e) {
+			LOG.error("Failed to load the page.",e);
+		}
+		this.pm.setPage(page);
+		
+		//force wait on all of document
+		this.page.asXml();
+		
+		super.doPage(this.page.getDocumentElement());
 	}
+	
 
 	public void run() {
 		LOG.info("Running Outlet Laptop Page scraper.");

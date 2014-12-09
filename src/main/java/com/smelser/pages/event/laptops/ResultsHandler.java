@@ -93,7 +93,14 @@ public class ResultsHandler extends EmptyEventHandler implements PageEventHandle
 		count = 0;
 		int lcount = -1;
 		int rcount = page.querySelectorAll(SELECTOR_RESULTS).getLength();
-		while(rcount != lcount && count < 20){
+		int constant = 0;
+		while((rcount != lcount && count < 20) || constant < 3){
+			
+			if(rcount != lcount)
+				constant = 0;
+			else
+				constant++;
+			
 			LOG.info("Waiting on content to stabalize..."+rcount+"-"+lcount);
 			try {
 				Thread.sleep(2000);

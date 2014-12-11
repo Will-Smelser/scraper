@@ -6,14 +6,23 @@ import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 
 public class MyWebClient {
-	private final WebClient webClient;
-	private final CookieManager cm;
+	private WebClient webClient=null;
+	private CookieManager cm=null;
 	
 	public MyWebClient(){
 		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
 	    java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
-	    
-	    webClient = new WebClient(BrowserVersion.FIREFOX_24);
+	 
+	    setupWebClient();
+	 
+	    cm = new CookieManager();
+	    cm.setCookiesEnabled(true);
+        webClient.setCookieManager(cm);
+        cm.clearCookies();
+	}
+	
+	private void setupWebClient(){
+		webClient = new WebClient(BrowserVersion.FIREFOX_24);
 	    webClient.getOptions().setTimeout(120000);
 	    webClient.waitForBackgroundJavaScript(60000);
 	    webClient.getOptions().setRedirectEnabled(true);
@@ -23,15 +32,18 @@ public class MyWebClient {
 	    webClient.getOptions().setCssEnabled(false);
 	    webClient.getOptions().setUseInsecureSSL(true);
 	    webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-	    
-	    cm = new CookieManager();
-	    cm.setCookiesEnabled(true);
-        webClient.setCookieManager(cm);
-        cm.clearCookies();
 	}
 	
-	public CookieManager getCookieManager(){ return this.cm; }
+	public void reset(){
+		if(webClient == null)
+			webClient.closeAllWindows();
+		
+		setupWebClient();
+	    webClient.setCookieManager(cm);
+	}
 	
-	public WebClient getWebClient(){ return webClient; }
+	public synchronized CookieManager getCookieManager(){ return this.cm; }
+	
+	public synchronized WebClient getWebClient(){ return webClient; }
 	
 }

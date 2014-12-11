@@ -194,7 +194,7 @@ public class Laptop implements Validator {
 
 		LOG.info("Value: " + value + ", Computed Value: " + cvalue);
 
-		return (value.longValue() <= cvalue.longValue() + 10.0);
+		return (value.longValue() <= cvalue.longValue() + 10.0 && this.stock == true);
 	}
 
 	private Number value() {

@@ -29,7 +29,7 @@ public class OutletLaptopPage extends PageBase implements MyPage, Runnable {
 	private HtmlPage page;
 	
 	private final MyWebClient myClient = new MyWebClient();
-    private final WebClient webClient = myClient.getWebClient();
+    private WebClient webClient = myClient.getWebClient();
     private final CookieManager cm = myClient.getCookieManager();
 
 	public OutletLaptopPage() {
@@ -41,7 +41,8 @@ public class OutletLaptopPage extends PageBase implements MyPage, Runnable {
 	
 	public void doPage(HtmlElement el) {
 		try {
-			webClient.closeAllWindows();
+			myClient.reset();
+			webClient = myClient.getWebClient();
 			
 			this.page = (HtmlPage) webClient.getPage(START_URL);
 		} catch (Exception e) {

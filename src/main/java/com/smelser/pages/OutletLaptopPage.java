@@ -1,22 +1,18 @@
 package com.smelser.pages;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.CookieManager;
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.smelser.MyWebClient;
-import com.smelser.pages.event.PageEventHandler;
 import com.smelser.pages.event.laptops.ResultsHandler;
 import com.smelser.utils.CookieToJSON;
 import com.smelser.utils.Gmail;
 import com.smelser.utils.PageManager;
+import com.smelser.utils.WebClientUtil;
 
 public class OutletLaptopPage extends PageBase implements MyPage, Runnable {
 	
@@ -26,23 +22,27 @@ public class OutletLaptopPage extends PageBase implements MyPage, Runnable {
 	static final boolean SEND_EMAIL = true;
 	static final int RELOAD_SLEEP = 30000; //ms
 	
+	static final BrowserVersion B_VERSION = BrowserVersion.FIREFOX_24;
+	
 	private HtmlPage page;
 	
-	private final MyWebClient myClient = new MyWebClient();
-    private WebClient webClient = myClient.getWebClient();
-    private final CookieManager cm = myClient.getCookieManager();
+    private WebClient webClient = new WebClient(B_VERSION);
+    private final CookieManager cm = new CookieManager();
 
 	public OutletLaptopPage() {
 		super(new PageManager());
 
 		//this.addSelector(new SortHandler(page, this));
 		this.addSelector(new ResultsHandler(pm));
+		
+		WebClientUtil.setup(webClient);
 	}	
 	
 	public void doPage(HtmlElement el) {
 		try {
-			myClient.reset();
-			webClient = myClient.getWebClient();
+			webClient.closeAllWindows();
+			webClient = new WebClient(B_VERSION);
+			WebClientUtil.setup(webClient);
 			
 			this.page = (HtmlPage) webClient.getPage(START_URL);
 		} catch (Exception e) {

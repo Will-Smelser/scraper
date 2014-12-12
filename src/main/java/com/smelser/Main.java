@@ -22,7 +22,6 @@ import com.smelser.utils.PageManager;
 
 public class Main {
 
-	static final boolean SEND_EMAIL = true;
 	static final Logger LOG = LoggerFactory.getLogger(Main.class);
 	
 	public static void main(String[] args) throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException {

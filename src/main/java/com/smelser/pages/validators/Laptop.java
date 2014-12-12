@@ -182,6 +182,7 @@ public class Laptop implements Validator {
 	}
 
 	public boolean valid() {
+
 		Number value;
 		try {
 			value = NumberFormat.getCurrencyInstance().parse(price);
@@ -195,6 +196,7 @@ public class Laptop implements Validator {
 		LOG.info("Value: " + value + ", Computed Value: " + cvalue);
 
 		return (value.longValue() <= cvalue.longValue() + 10.0 && this.stock == true);
+		
 	}
 
 	private Number value() {

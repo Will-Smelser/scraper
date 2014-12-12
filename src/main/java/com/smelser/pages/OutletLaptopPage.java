@@ -26,7 +26,7 @@ public class OutletLaptopPage extends PageBase implements MyPage, Runnable {
 	
 	private HtmlPage page;
 	
-    private WebClient webClient = new WebClient(B_VERSION);
+    private WebClient webClient = null;
     private final CookieManager cm = new CookieManager();
 
 	public OutletLaptopPage() {
@@ -34,15 +34,19 @@ public class OutletLaptopPage extends PageBase implements MyPage, Runnable {
 
 		//this.addSelector(new SortHandler(page, this));
 		this.addSelector(new ResultsHandler(pm));
-		
-		WebClientUtil.setup(webClient);
 	}	
 	
 	public void doPage(HtmlElement el) {
 		try {
-			webClient.closeAllWindows();
+			if(webClient != null)
+				webClient.closeAllWindows();
+			
 			webClient = new WebClient(B_VERSION);
 			WebClientUtil.setup(webClient);
+			webClient.setCookieManager(cm);
+			
+			if(!pm.hasValidators())
+				cm.clearCookies();
 			
 			this.page = (HtmlPage) webClient.getPage(START_URL);
 		} catch (Exception e) {
@@ -78,6 +82,9 @@ public class OutletLaptopPage extends PageBase implements MyPage, Runnable {
 		    	
 		    	LOG.info(pm.getValidatorsAsString("================"));
 		    	LOG.trace(cookies);
+		    	
+		    	pm.clearValidators();
+		    	cm.clearCookies();
 		    }else{
 		    	LOG.info("No items added to cart");
 		    }
